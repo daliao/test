@@ -127,6 +127,12 @@ def test_checkInclusion():
 #######################################################################
 
 def multiply(num1, num2):
+    '''
+    题目：计算两个数字字符串的乘积，返回结果字符串。
+    思路：两个数字相乘，最大数位是两个数字个数之和，首先构造存结果的数组
+         依次各取一个数字进行乘积运算，并把结果加入结果数组的相应位置。
+    '''
+    print("input strings: {0},{1}".format(num1,num2))
     if num1 == "0" or num2 == "0":
         return "0"
     result = [0] * (len(num1)+len(num2))
@@ -143,7 +149,7 @@ def multiply(num1, num2):
     result_str = "".join(map(lambda key: str(key), result)).lstrip("0")   
     return result_str
 
-def test_fun():
+def test_Multiply():
     print(multiply("2", "3"))
     print(multiply("123", "456"))
     print(multiply("123", "111"))
@@ -896,9 +902,116 @@ def removeString(in_str, remove_str='ab'):
                 ret_list = ret_list[:len(ret_list)-str_len]
     return ''.join(ret_list)
 
-def test_fun():
+def test_removeString():
     ret=removeString('aabbc')
     print(ret)
+#####################################################################
+
+def algo_merge(seq):
+    '''
+    归并算法实现
+    '''
+    size = len(seq)
+    if size <= 1:
+        return seq
+    mid = size // 2 # get middle index
+
+    left = algo_merge(seq[:mid])
+    right = algo_merge(seq[mid:])
+
+    return alog_merging(left, right)
+
+
+def alog_merging(left, right):
+    result = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result += left[i:]
+    result += right[j:]
+
+    return result
+###################################################################
+def alog_heapsort(seq):
+    '''
+    堆排序实现
+    '''
+
+    def _heapify(seq, heap_size, index, kkk=""):
+        print(seq, heap_size, index, kkk)
+        largest = index # 最大值索引
+        left_child = (2 * index) + 1
+        right_child = (2 * index) + 2
+
+        if left_child < heap_size and seq[left_child] > seq[largest]:
+            largest = left_child
+        if right_child < heap_size and seq[right_child] > seq[largest]:
+            largest = right_child
+
+        if largest != index:
+            seq[largest], seq[index] = seq[index], seq[largest]
+            _heapify(seq, heap_size, largest, "subpath")
+
+
+    size = len(seq)
+    # create Max Heap from list
+    for i in range(size//2-1, -1, -1):
+        _heapify(seq, size, i)
+        print(seq)
+
+    # move heap root to end of list
+    for i in range(size-1, 0, -1):
+        seq[i], seq[0] = seq[0], seq[i]
+        _heapify(seq, i, 0) 
+
+def alog_quicksort(seq):
+    '''
+    快速排序实现
+    '''
+    def _partition(items, low, high):
+        pivot = items[(low+high)//2]
+        i = low - 1
+        j = high + 1
+        while True:
+            i += 1
+            while items[i] < pivot:
+                i += 1
+            
+            j -= 1
+            while items[j] > pivot:
+                j -= 1
+
+            if i >= j:
+                return j
+            
+            items[i], items[j] = items[j], items[i]
+        
+    def _quicksort(items, low, high):
+        if low < high:
+            splistindex=_partition(items, low, high)
+            _quicksort(items, low, splistindex)
+            _quicksort(items, splistindex+1, high)
+    
+    _quicksort(seq, 0, len(seq)-1)
+
+
+def test_fun():
+    # test_Multiply()
+    import random
+    seq = random.sample(range(10000),11)
+    print(seq)
+    print(algo_merge(seq))
+    #sorted(seq)
+    print("###"*10)
+    # alog_heapsort(seq)
+    alog_quicksort(seq)
+    print(seq)
 
 if __name__=="__main__":
     print(timeit.timeit("test_fun()", setup="from __main__ import test_fun", number=1))
