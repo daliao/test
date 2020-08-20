@@ -1001,7 +1001,7 @@ def alog_quicksort(seq):
     _quicksort(seq, 0, len(seq)-1)
 
 
-def test_fun():
+def test_alog():
     # test_Multiply()
     import random
     seq = random.sample(range(10000),11)
@@ -1012,6 +1012,73 @@ def test_fun():
     # alog_heapsort(seq)
     alog_quicksort(seq)
     print(seq)
+#################################################################
+class LinkNode(object):
+    def __init__(self, val):
+        super().__init__()
+        self.prelist = []
+        self.value = val
+        self.nextlist = []
+def calc_tasklinks(seq):
+    
+    def _create_links(seq):
+        d = {}
+        root_list = []
+        remove_list = []
+        for ele in seq:
+            node1 = None
+            node2 = None
+            if ele[1] not in d:
+                node2 = LinkNode(ele[1])
+                d[ele[1]] = node2
+            else:
+                node2 = d[ele[1]]
+            if ele[0] not in d:
+                node1 = LinkNode(ele[0])
+                d[ele[0]] = node1
+            else:
+                node1 = d[ele[0]]
+            
+            node1.prelist.append(node2)
+            node2.nextlist.append(node1)
+            if node2 not in root_list and node2 not in remove_list:
+                root_list.append(node2)
+            if node1 in root_list:
+                root_list.remove(node1)
+                if node1 not in remove_list:
+                    remove_list.append(node1)
+        return root_list
+
+    def _iter_links(root_list):
+        if not root_list:
+            return []
+        tmp_list = []
+        for root in root_list:
+            tmp_list.extend(root.nextlist)
+            for i in root.nextlist:
+                i.prelist.remove(root)
+        tmp_list=list(set(tmp_list))
+        return list(filter(lambda x: not x.prelist, tmp_list))
+
+    root_list = _create_links(seq)
+    result_list = []
+    while root_list:
+        result_list.extend(root_list)
+        root_list = _iter_links(root_list)
+    print(list(map(lambda x: x.value, result_list)))
+        
+
+
+def test_fun():
+    seq = [(9,1), (1,2), (3,4), (6,3), (3,2), (6,8), (2,5)]
+    calc_tasklinks(seq)
 
 if __name__=="__main__":
     print(timeit.timeit("test_fun()", setup="from __main__ import test_fun", number=1))
+
+
+
+
+
+
+
