@@ -1087,7 +1087,7 @@ def test_fun():
     # test_Multiply()
 
     ### 三数之和
-    # test_three_sum()
+    test_three_sum()
 
 
     # seq = [(9,1), (1,2), (3,4), (6,3), (3,2), (6,8), (2,5)]
