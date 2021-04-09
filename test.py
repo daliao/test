@@ -1,6 +1,12 @@
 # -*- coding: utf-8  -*-
 #!/usr/local/bin/python
 
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+
 ################################################################
 def lengthOfLongestSubstring(s):
     '''
@@ -605,10 +611,6 @@ def test_trap():
 
 ###############################################################################
 # 链表与树
-class ListNode(object):
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
 
 def mergetwolists(l1,l2):
     l3_head = ListNode(None)
@@ -1013,12 +1015,14 @@ def test_alog():
     alog_quicksort(seq)
     print(seq)
 #################################################################
+
 class LinkNode(object):
     def __init__(self, val):
         super().__init__()
         self.prelist = []
         self.value = val
         self.nextlist = []
+
 def calc_tasklinks(seq):
     
     def _create_links(seq):
@@ -1067,7 +1071,52 @@ def calc_tasklinks(seq):
         root_list = _iter_links(root_list)
     print(list(map(lambda x: x.value, result_list)))
         
+def eatBalalaByMonkey(monkey):
+    balana = 0
+    if monkey < 4:
+        balana = monkey;
+    else:
+        balana += 2
+        balana += eatBalalaByMonkey(monkey-1)
+    return balana;
 
+
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.value = val
+        self.next = next
+
+def calcSumInListNodes(nodes):
+    '''
+    计算链表之和： 7->8->7->1->4
+    计算逻辑：取奇数的数字+取偶数的数字
+    计算例子：774+81=855
+    '''
+    # 链表反转
+    cur_ptr = nodes
+    next_ptr = None
+    prev_ptr = None
+    while cur_ptr:
+        next_ptr = cur_ptr.next
+        cur_ptr.next = prev_ptr
+        prev_ptr = cur_ptr
+        cur_ptr = next_ptr
+    newNodes = prev_ptr
+
+    sumTotal = 0
+    fillzero_count = 0
+    while newNodes:
+        a1 = newNodes.value
+        a2 = newNodes.next.value if newNodes.next else 0
+        sumTotal += (a1+a2) * (10**fillzero_count)
+        fillzero_count += 1
+
+        # skip two steps
+        newNodes = newNodes.next
+        if newNodes:
+            newNodes = newNodes.next
+    return sumTotal
+            
 
 def test_fun():
     pass
@@ -1087,8 +1136,19 @@ def test_fun():
     # test_Multiply()
 
     ### 三数之和
-    test_three_sum()
+    # test_three_sum()
 
+    ### monkey eat balala
+    # for monkey in range(10):
+    #    print("monkey {0} = balala {1}".format(monkey, eatBalalaByMonkey(monkey)))
+
+    #
+
+    head = ListNode(9, ListNode(9, ListNode(9, ListNode(9, ListNode(9, ListNode(9)))))) 
+
+    print(calcSumInListNodes(head))
+
+    
 
     # seq = [(9,1), (1,2), (3,4), (6,3), (3,2), (6,8), (2,5)]
     # calc_tasklinks(seq)
